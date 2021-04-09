@@ -9,7 +9,6 @@ const Categories = () => {
     axios
       .get("http://localhost:3000/categories")
       .then((response) => {
-        console.log(response.data);
         setCategories(response.data);
       })
       .catch((error) => console.log(error));
@@ -23,7 +22,7 @@ const Categories = () => {
         Categories
       </h1>
 
-      <Grid gridOf="categories" />
+      <Grid gridOf="categories" data={categories} />
     </>
   );
 };

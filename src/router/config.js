@@ -25,12 +25,12 @@ const routes = [
     component: "Product",
   },
   {
-    path: ["/category/:id"],
+    path: ["/category"],
     exact: true,
     component: "Category",
   },
   {
-    path: ["/order/:id"],
+    path: ["/order"],
     exact: true,
     component: "Order",
   },
@@ -40,7 +40,7 @@ const routes = [
     component: "Blogs",
   },
   {
-    path: ["/blog/:id"],
+    path: ["/blog"],
     exact: true,
     component: "Blog",
   },
