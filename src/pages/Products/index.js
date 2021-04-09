@@ -23,7 +23,7 @@ const Products = (props) => {
         Products
       </h1>
 
-      <Grid gridOf="products" />
+      <Grid gridOf="product" data={products} />
     </>
   );
 };

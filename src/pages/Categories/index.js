@@ -22,7 +22,7 @@ const Categories = () => {
         Categories
       </h1>
 
-      <Grid gridOf="categories" data={categories} />
+      <Grid gridOf="category" data={categories} />
     </>
   );
 };

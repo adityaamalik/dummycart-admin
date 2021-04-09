@@ -16,7 +16,7 @@ const Grid = (props) => {
                 <S.ImageCol key={val._id} xl={6} lg={6} md={10} sm={20} xs={20}>
                   <Link
                     to={{
-                      pathname: "/category",
+                      pathname: "/" + gridOf,
                       state: {
                         id: val._id,
                       },
