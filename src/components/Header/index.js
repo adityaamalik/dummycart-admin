@@ -52,7 +52,7 @@ const Header = () => {
           <S.Logo src={Logo} alt="Logo" />
         </Col>
         <Col span={12}>
-          <S.Heading href="/records">MYINDIANTHINGS ADMIN</S.Heading>
+          <S.Heading href="/">MYINDIANTHINGS ADMIN</S.Heading>
         </Col>
         <Col span={6}>
           <Dropdown overlay={menu} trigger={["click"]}>
