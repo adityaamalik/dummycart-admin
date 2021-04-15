@@ -34,6 +34,9 @@ const Blog = (props) => {
       (response) => {
         console.log(response.data);
         setBlog(response.data);
+        document.getElementById("image").value = null;
+        setTitle("");
+        setContent("");
         message.success("Blog updated !");
       },
       (error) => {

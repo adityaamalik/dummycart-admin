@@ -58,6 +58,13 @@ const Products = () => {
         console.log(response.data);
         setProducts([...products, response.data]);
         setName("");
+        document.getElementById("image").value = null;
+        setDescription("");
+        setOriginalPrice("");
+        setDiscountedPrice("");
+        setFile({});
+        setCategory("");
+        setColours("");
         message.success("Successfully created the new product");
       })
       .catch((error) => {

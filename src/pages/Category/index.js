@@ -60,6 +60,7 @@ const Category = (props) => {
         .then((response) => {
           console.log(response.data);
           setCategory(response.data);
+          document.getElementById("img").value = null;
           setImage({});
           message.success("Successfully updated the category image");
         })

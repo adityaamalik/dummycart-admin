@@ -32,6 +32,9 @@ const Blogs = () => {
       (response) => {
         console.log(response.data);
         setBlogs([...blogs, response.data]);
+        document.getElementById("image").value = null;
+        setBlogTitle("");
+        setBlogContent("");
         message.success("New blog posted");
       },
       (error) => {

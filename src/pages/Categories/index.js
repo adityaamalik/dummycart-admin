@@ -30,11 +30,12 @@ const Categories = () => {
         console.log(response.data);
         setCategories([...categories, response.data]);
         setName("");
+        document.getElementById("image").value = null;
         message.success("Successfully created the new category");
       })
       .catch((error) => {
         console.log(error);
-        setName("");
+
         message.error("Some error occured");
       });
   };
@@ -59,7 +60,11 @@ const Categories = () => {
               onChange={(val) => setName(val.target.value)}
             />
             <br />
-            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+            <input
+              id="image"
+              type="file"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
             <br />
             <Button onClick={() => submitCategory()} style={{ margin: "10px" }}>
               Post

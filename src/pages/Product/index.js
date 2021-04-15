@@ -50,6 +50,8 @@ const Product = (props) => {
       .put(`http://localhost:3000/products/gallery-images/${id}`, formData)
       .then((response) => {
         setGallery(response.data.images);
+        document.getElementById("images").value = null;
+        setGallery([]);
         message.success("Successfully uploaded the photos");
       })
       .catch((err) => {
@@ -105,7 +107,14 @@ const Product = (props) => {
       .put(`http://localhost:3000/products/${id}`, formData)
       .then((response) => {
         console.log(response.data);
-
+        setProduct(response.data);
+        setName("");
+        setDescription("");
+        setOriginalPrice("");
+        setDiscountedPrice("");
+        setIsFeatured();
+        setCategory("");
+        setColours("");
         message.success("Successfully updated the product");
       })
       .catch((error) => {
