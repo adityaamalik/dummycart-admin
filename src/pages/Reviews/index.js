@@ -23,7 +23,7 @@ const Reviews = () => {
         Reviews
       </h1>
 
-      <Grid gridOf="reviews" />
+      <Grid gridOf="reviews" data={reviews} />
     </>
   );
 };

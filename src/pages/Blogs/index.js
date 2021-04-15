@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Grid from "../../components/Grid";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 
 const Blogs = () => {
@@ -9,6 +9,7 @@ const Blogs = () => {
   const [blogInput, toggleBlogInput] = useState(false);
   const [title, setBlogTitle] = useState("");
   const [content, setBlogContent] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     axios
@@ -21,20 +22,23 @@ const Blogs = () => {
   }, []);
 
   const submitBlog = () => {
-    axios
-      .post("http://localhost:3000/blogs", {
-        title: title,
-        content: content,
-      })
-      .then(
-        (response) => {
-          console.log(response.data);
-          alert("Successfully posted");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    const fmData = new FormData();
+
+    fmData.append("title", title);
+    fmData.append("content", content);
+    fmData.append("image", image);
+
+    axios.post("http://localhost:3000/blogs", fmData).then(
+      (response) => {
+        console.log(response.data);
+        setBlogs([...blogs, response.data]);
+        message.success("New blog posted");
+      },
+      (error) => {
+        console.log(error);
+        message.error("Some error occured");
+      }
+    );
   };
 
   return (
@@ -57,6 +61,16 @@ const Blogs = () => {
             placeholder="Content"
             value={content}
             onChange={(val) => setBlogContent(val.target.value)}
+          />
+          <br />
+          <label htmlFor="image">Select Single Image : </label>
+          <input
+            required
+            id="image"
+            type="file"
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
           />
           <br />
           <Button onClick={() => submitBlog()} style={{ margin: "10px" }}>

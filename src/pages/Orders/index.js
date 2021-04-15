@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Row, Col } from "antd";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -53,15 +54,22 @@ const Orders = () => {
                 sm={24}
                 style={{ padding: "10px" }}
               >
-                <Card
-                  onClick={() =>
-                    (window.location.pathname = `/order/${order._id}`)
-                  }
-                  hoverable
-                  cover={<img alt={order.name} src={order.image} />}
+                <Link
+                  to={{
+                    pathname: "/order",
+                    state: {
+                      id: order._id,
+                    },
+                  }}
                 >
-                  Name : {order.name} <br />
-                </Card>
+                  <Card hoverable>
+                    Name : {order.name} <br />
+                    Shipping Address 1 : {order.shippingAddress1} <br />
+                    Shipping Address 2 : {order.shippingAddress2} <br />
+                    Payment Status : {order.paymentstatus} <br />
+                    Total Price : {order.totalPrice}
+                  </Card>
+                </Link>
               </Col>
             ))}
           </Row>

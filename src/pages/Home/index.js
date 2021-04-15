@@ -51,6 +51,13 @@ const Home = () => {
                   </Card>
                 </Link>
               </S.ImageCol>
+              <S.ImageCol xl={6} lg={6} md={10} sm={20} xs={20}>
+                <Link to="/contacts">
+                  <Card hoverable>
+                    <Meta title="CONTACTS" />
+                  </Card>
+                </Link>
+              </S.ImageCol>
             </Row>
           </Col>
         </Row>

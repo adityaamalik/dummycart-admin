@@ -49,6 +49,11 @@ const routes = [
     exact: true,
     component: "Reviews",
   },
+  {
+    path: ["/contacts"],
+    exact: true,
+    component: "Contacts",
+  },
 ];
 
 export default routes;

@@ -36,9 +36,9 @@ const menu = (
       </S.Span>
     </Menu.Item>
     <Menu.Item key="6">
-      <S.Span href="/logout">
-        {window.location.pathname === "/logout" && <CaretRightOutlined />}
-        logout
+      <S.Span href="/contacts">
+        {window.location.pathname === "/contacts" && <CaretRightOutlined />}
+        contacts
       </S.Span>
     </Menu.Item>
   </Menu>
@@ -57,6 +57,7 @@ const Header = () => {
         <Col span={6}>
           <Dropdown overlay={menu} trigger={["click"]}>
             <a
+              href="/#"
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
             >
