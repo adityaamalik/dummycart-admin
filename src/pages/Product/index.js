@@ -168,9 +168,7 @@ const Product = (props) => {
               <Col lg={6} md={12} sm={24} xs={24} key={index}>
                 {!!img && (
                   <Image
-                    src={`data:image/${
-                      img.contentType
-                    };base64,${new Buffer.from(img.data).toString("base64")}`}
+                    src={img}
                     alt="gallery image"
                     width="200px"
                     style={{ margin: "10px" }}
