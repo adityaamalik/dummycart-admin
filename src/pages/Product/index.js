@@ -158,13 +158,7 @@ const Product = (props) => {
       >
         <h1>Name : {product.name}</h1>
         {!!product.image && (
-          <Image
-            width="300px"
-            height="auto"
-            src={`data:image/${
-              product.image.contentType
-            };base64,${new Buffer.from(product.image.data).toString("base64")}`}
-          />
+          <Image width="300px" height="auto" src={product.image} />
         )}
         <br />
 
