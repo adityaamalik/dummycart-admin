@@ -1,6 +1,6 @@
 import * as S from "./styles";
 import { Row, Col, Menu, Dropdown } from "antd";
-import Logo from "../../img/doc.png";
+import Logo from "../../img/logo.jpeg";
 import { CaretRightOutlined } from "@ant-design/icons";
 
 const menu = (
