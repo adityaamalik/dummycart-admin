@@ -7,7 +7,7 @@ const Reviews = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/reviews")
+      .get("https://myindianthings-backend.herokuapp.com/reviews")
       .then((response) => {
         console.log(response.data);
         setReviews(response.data);

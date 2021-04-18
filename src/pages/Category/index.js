@@ -14,7 +14,7 @@ const Category = (props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/categories/${id}`)
+      .get(`https://myindianthings-backend.herokuapp.com/categories/${id}`)
       .then((response) => {
         console.log(response.data);
         setCategory(response.data);
@@ -30,7 +30,10 @@ const Category = (props) => {
       formData.append("name", name);
 
       axios
-        .put(`http://localhost:3000/categories/${id}`, formData)
+        .put(
+          `https://myindianthings-backend.herokuapp.com/categories/${id}`,
+          formData
+        )
         .then((response) => {
           console.log(response.data);
           setCategory(response.data);
@@ -56,7 +59,10 @@ const Category = (props) => {
       const formData = new FormData();
       formData.append("image", image);
       axios
-        .put(`http://localhost:3000/categories/${id}`, formData)
+        .put(
+          `https://myindianthings-backend.herokuapp.com/categories/${id}`,
+          formData
+        )
         .then((response) => {
           console.log(response.data);
           setCategory(response.data);
@@ -70,6 +76,19 @@ const Category = (props) => {
           message.error("Some error occured");
         });
     }
+  };
+
+  const deleteCategory = () => {
+    axios
+      .delete(`https://myindianthings-backend.herokuapp.com/categories/${id}`)
+      .then((response) => {
+        message
+          .success("Category deleted successfully !")
+          .then(() => (window.location.pathname = "/categories"));
+      })
+      .catch((err) => {
+        message.error("Cannot delete category !");
+      });
   };
 
   return (
@@ -146,6 +165,16 @@ const Category = (props) => {
           />
           <br />
           <Button onClick={() => submitImage()}>Update Image</Button>
+        </div>
+
+        <div
+          style={{
+            marginTop: "15px",
+          }}
+        >
+          <Button danger type="default" onClick={() => deleteCategory()}>
+            Delete Category
+          </Button>
         </div>
       </div>
     </>

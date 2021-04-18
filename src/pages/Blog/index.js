@@ -16,7 +16,7 @@ const Blog = (props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/blogs/${id}`)
+      .get(`https://myindianthings-backend.herokuapp.com/blogs/${id}`)
       .then((response) => {
         setBlog(response.data);
       })
@@ -30,25 +30,27 @@ const Blog = (props) => {
     fmData.append("content", content);
     fmData.append("image", image);
 
-    axios.put(`http://localhost:3000/blogs/${id}`, fmData).then(
-      (response) => {
-        console.log(response.data);
-        setBlog(response.data);
-        document.getElementById("image").value = null;
-        setTitle("");
-        setContent("");
-        message.success("Blog updated !");
-      },
-      (error) => {
-        console.log(error);
-        message.error("Some error occured");
-      }
-    );
+    axios
+      .put(`https://myindianthings-backend.herokuapp.com/blogs/${id}`, fmData)
+      .then(
+        (response) => {
+          console.log(response.data);
+          setBlog(response.data);
+          document.getElementById("image").value = null;
+          setTitle("");
+          setContent("");
+          message.success("Blog updated !");
+        },
+        (error) => {
+          console.log(error);
+          message.error("Some error occured");
+        }
+      );
   };
 
   const deleteBlog = () => {
     axios
-      .delete(`http://localhost:3000/blogs/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/blogs/${id}`)
       .then((response) => {
         message.success("Deleted the blog successfully !");
         window.location.pathname = "/blogs";

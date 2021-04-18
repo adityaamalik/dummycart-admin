@@ -13,7 +13,7 @@ const Blogs = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/blogs")
+      .get("https://myindianthings-backend.herokuapp.com/blogs")
       .then((response) => {
         console.log(response.data);
         setBlogs(response.data);
@@ -28,20 +28,22 @@ const Blogs = () => {
     fmData.append("content", content);
     fmData.append("image", image);
 
-    axios.post("http://localhost:3000/blogs", fmData).then(
-      (response) => {
-        console.log(response.data);
-        setBlogs([...blogs, response.data]);
-        document.getElementById("image").value = null;
-        setBlogTitle("");
-        setBlogContent("");
-        message.success("New blog posted");
-      },
-      (error) => {
-        console.log(error);
-        message.error("Some error occured");
-      }
-    );
+    axios
+      .post("https://myindianthings-backend.herokuapp.com/blogs", fmData)
+      .then(
+        (response) => {
+          console.log(response.data);
+          setBlogs([...blogs, response.data]);
+          document.getElementById("image").value = null;
+          setBlogTitle("");
+          setBlogContent("");
+          message.success("New blog posted");
+        },
+        (error) => {
+          console.log(error);
+          message.error("Some error occured");
+        }
+      );
   };
 
   return (

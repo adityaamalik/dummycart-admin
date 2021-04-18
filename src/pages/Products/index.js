@@ -21,7 +21,7 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/products")
+      .get("https://myindianthings-backend.herokuapp.com/products")
       .then((response) => {
         console.log("Products");
         console.log(response.data);
@@ -30,7 +30,7 @@ const Products = () => {
       .catch((error) => console.log(error));
 
     axios
-      .get("http://localhost:3000/categories")
+      .get("https://myindianthings-backend.herokuapp.com/categories")
       .then((response) => {
         console.log("Categories");
         console.log(response.data);
@@ -53,7 +53,7 @@ const Products = () => {
     formData.append("category", category);
 
     axios
-      .post("http://localhost:3000/products", formData)
+      .post("https://myindianthings-backend.herokuapp.com/products", formData)
       .then((response) => {
         console.log(response.data);
         setProducts([...products, response.data]);

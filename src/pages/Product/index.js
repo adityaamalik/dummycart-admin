@@ -23,7 +23,7 @@ const Product = (props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/products/${id}`)
+      .get(`https://myindianthings-backend.herokuapp.com/products/${id}`)
       .then((response) => {
         setGallery(response.data.images);
         setProduct(response.data);
@@ -31,7 +31,7 @@ const Product = (props) => {
       .catch((error) => console.log(error));
 
     axios
-      .get("http://localhost:3000/categories")
+      .get("https://myindianthings-backend.herokuapp.com/categories")
       .then((response) => {
         console.log(response.data);
         setCategories(response.data);
@@ -47,7 +47,10 @@ const Product = (props) => {
     }
 
     axios
-      .put(`http://localhost:3000/products/gallery-images/${id}`, formData)
+      .put(
+        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${id}`,
+        formData
+      )
       .then((response) => {
         setGallery(response.data.images);
         document.getElementById("images").value = null;
@@ -67,7 +70,10 @@ const Product = (props) => {
     formData.append("images", emptyImgs);
 
     axios
-      .put(`http://localhost:3000/products/gallery-images/${id}`, formData)
+      .put(
+        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${id}`,
+        formData
+      )
       .then((response) => {
         setGallery(response.data.images);
         message.success("Successfully removed all the phots");
@@ -104,7 +110,10 @@ const Product = (props) => {
     }
 
     axios
-      .put(`http://localhost:3000/products/${id}`, formData)
+      .put(
+        `https://myindianthings-backend.herokuapp.com/products/${id}`,
+        formData
+      )
       .then((response) => {
         console.log(response.data);
         setProduct(response.data);
@@ -126,7 +135,7 @@ const Product = (props) => {
 
   const deleteProduct = () => {
     axios
-      .delete(`http://localhost:3000/products/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/products/${id}`)
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/products";

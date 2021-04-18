@@ -11,7 +11,7 @@ const Categories = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/categories")
+      .get("https://myindianthings-backend.herokuapp.com/categories")
       .then((response) => {
         setCategories(response.data);
       })
@@ -25,7 +25,7 @@ const Categories = () => {
     formData.append("name", name);
 
     axios
-      .post("http://localhost:3000/categories", formData)
+      .post("https://myindianthings-backend.herokuapp.com/categories", formData)
       .then((response) => {
         console.log(response.data);
         setCategories([...categories, response.data]);

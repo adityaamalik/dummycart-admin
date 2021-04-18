@@ -18,7 +18,7 @@ const Order = (props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/orders/${id}`)
+      .get(`https://myindianthings-backend.herokuapp.com/orders/${id}`)
       .then((response) => {
         console.log(response.data);
         setOrder(response.data);
@@ -28,7 +28,7 @@ const Order = (props) => {
 
   const deleteOrder = () => {
     axios
-      .delete(`http://localhost:3000/orders/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/orders/${id}`)
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/orders";
@@ -47,7 +47,7 @@ const Order = (props) => {
         paymentstatus: paymentStatus,
       };
       axios
-        .put(`http://localhost:3000/orders/${id}`, data)
+        .put(`https://myindianthings-backend.herokuapp.com/orders/${id}`, data)
         .then((response) => {
           console.log(response.data);
           message.success("Successfully updated the payment status");
@@ -70,7 +70,7 @@ const Order = (props) => {
         shippingstatus: shippingStatus,
       };
       axios
-        .put(`http://localhost:3000/orders/${id}`, data)
+        .put(`https://myindianthings-backend.herokuapp.com/orders/${id}`, data)
         .then((response) => {
           console.log(response.data);
           message.success("Successfully updated the shipping status");
