@@ -10,7 +10,7 @@ const Grid = (props) => {
 
   const deleteReview = (id) => {
     axios
-      .delete(`http://localhost:3000/reviews/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/reviews/${id}`)
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/reviews";
