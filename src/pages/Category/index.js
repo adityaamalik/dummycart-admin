@@ -102,7 +102,15 @@ const Category = (props) => {
       >
         <h1>Name : {category.name}</h1>
         {!!category.image && (
-          <Image width="300px" height="auto" src={category.image} />
+          <Image
+            width="300px"
+            height="auto"
+            src={`data:image/${
+              category.image.contentType
+            };base64,${new Buffer.from(category.image.data).toString(
+              "base64"
+            )}`}
+          />
         )}
 
         <br />

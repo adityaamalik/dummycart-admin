@@ -10,7 +10,7 @@ const Grid = (props) => {
 
   const deleteReview = (id) => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/reviews/${id}`)
+      .delete(`http://localhost:3000/reviews/${id}`)
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/reviews";
@@ -26,6 +26,16 @@ const Grid = (props) => {
       <Row type="flex" justify="center">
         {!!data ? (
           data.map((val) => {
+            let img, url;
+
+            if (!!val.image) {
+              img = new Buffer.from(val.image.data).toString("base64");
+              url = `data:image/${val.image.contentType};base64,${img}`;
+            } else {
+              img = new Buffer.from(val.commentimages.data).toString("base64");
+              url = `data:image/${val.commentimages.contentType};base64,${img}`;
+            }
+
             return (
               <S.ImageCol key={val._id} xl={6} lg={6} md={10} sm={20} xs={20}>
                 <Link
@@ -43,7 +53,8 @@ const Grid = (props) => {
                       <img
                         height="100%"
                         alt={val.name}
-                        src={val.image || val.commentimages}
+                        // src={val.image || val.commentimages}
+                        src={url}
                       />
                     }
                   >

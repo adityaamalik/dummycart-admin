@@ -68,7 +68,15 @@ const Blog = (props) => {
     >
       <h1>Title : {blog.title}</h1>
       <h2>Content : {blog.content}</h2>
-      {!!blog.image && <Image width="300px" height="auto" src={blog.image} />}
+      {!!blog.image && (
+        <Image
+          width="300px"
+          height="auto"
+          src={`data:image/${blog.image.contentType};base64,${new Buffer.from(
+            blog.image.data
+          ).toString("base64")}`}
+        />
+      )}
 
       <br />
       <br />
