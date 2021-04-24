@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Col, Image, Input, message, Radio, Row, Select } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -16,10 +17,11 @@ const Product = (props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
-  const [discountedPrice, setDiscountedPrice] = useState("");
+  const [discountPercentage, setDiscountPercentage] = useState("");
   const [isFeatured, setIsFeatured] = useState();
-  const [colours, setColours] = useState("");
   const [category, setCategory] = useState("");
+
+  const [associatedColour, setAssociatedColour] = useState("");
 
   useEffect(() => {
     axios
@@ -33,7 +35,6 @@ const Product = (props) => {
     axios
       .get("https://myindianthings-backend.herokuapp.com/categories")
       .then((response) => {
-        console.log(response.data);
         setCategories(response.data);
       })
       .catch((error) => console.log(error));
@@ -84,7 +85,6 @@ const Product = (props) => {
   };
 
   const submitProduct = () => {
-    const colourArray = colours.split(",");
     const formData = new FormData();
 
     if (name !== "") {
@@ -96,14 +96,11 @@ const Product = (props) => {
     if (originalPrice !== "") {
       formData.append("originalPrice", originalPrice);
     }
-    if (discountedPrice !== "") {
-      formData.append("discountedPrice", discountedPrice);
+    if (discountPercentage !== "") {
+      formData.append("discountPercentage", discountPercentage);
     }
     if (isFeatured !== undefined) {
       formData.append("isFeatured", isFeatured);
-    }
-    if (colours !== "") {
-      formData.append("colours", colourArray);
     }
     if (category !== "") {
       formData.append("category", category);
@@ -120,10 +117,9 @@ const Product = (props) => {
         setName("");
         setDescription("");
         setOriginalPrice("");
-        setDiscountedPrice("");
+        setDiscountPercentage("");
         setIsFeatured();
         setCategory("");
-        setColours("");
         message.success("Successfully updated the product");
       })
       .catch((error) => {
@@ -144,6 +140,25 @@ const Product = (props) => {
       .catch((err) => {
         console.log(err);
         message.error("Cannot delete the product");
+      });
+  };
+
+  const submitColour = (imgid) => {
+    axios
+      .post(
+        `https://myindianthings-backend.herokuapp.com/products/colours/${id}`,
+        {
+          imageId: imgid,
+          colour: associatedColour,
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        message.success("Successfully updated the associated colour");
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("Cannot update the associated colour");
       });
   };
 
@@ -173,14 +188,30 @@ const Product = (props) => {
             return (
               <Col lg={6} md={12} sm={24} xs={24} key={index}>
                 {!!img && (
-                  <Image
-                    src={`data:image/${
-                      img.contentType
-                    };base64,${new Buffer.from(img.data).toString("base64")}`}
-                    alt="gallery image"
-                    width="200px"
-                    style={{ margin: "10px" }}
-                  />
+                  <>
+                    <Image
+                      src={`data:image/${
+                        img.contentType
+                      };base64,${img.data.toString("base64")}`}
+                      alt="gallery image"
+                      width="200px"
+                      style={{ margin: "10px" }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Enter colour"
+                      defaultValue={img.colour}
+                      onChange={(e) => setAssociatedColour(e.target.value)}
+                    />
+                    <CheckOutlined
+                      onClick={() => submitColour(img.customId)}
+                      style={{
+                        marginLeft: "5px",
+                        padding: "5px",
+                        border: "1px solid black",
+                      }}
+                    />
+                  </>
                 )}
               </Col>
             );
@@ -221,9 +252,7 @@ const Product = (props) => {
           <br />
           <p>Original Price : {product.originalPrice}</p>
           <br />
-          <p>Discounted Price : {product.discountedPrice}</p>
-          <br />
-          <p>Colours : {product.colours}</p>
+          <p>Discount Percentage : {product.discountPercentage}</p>
           <br />
           <p>Featured Item : {product.isFeatured ? "Yes" : "No"}</p>
         </div>
@@ -271,9 +300,9 @@ const Product = (props) => {
             required
             style={{ margin: "10px", width: "300px" }}
             type="number"
-            value={discountedPrice}
-            onChange={(e) => setDiscountedPrice(e.target.value)}
-            placeholder="Discounted Price"
+            value={discountPercentage}
+            onChange={(e) => setDiscountPercentage(e.target.value)}
+            placeholder="Discount Percentage"
           />
           <br />
           <Select
@@ -299,14 +328,6 @@ const Product = (props) => {
             <Radio value={true}>Featured Item</Radio>
             <Radio value={false}>Not Featured</Radio>
           </Radio.Group>
-          <br />
-          <Input
-            type="text"
-            placeholder="Enter comma separated color hex codes"
-            value={colours}
-            onChange={(e) => setColours(e.target.value)}
-            style={{ margin: "10px", width: "300px" }}
-          />
           <br />
           <Button onClick={() => submitProduct()} style={{ margin: "10px" }}>
             Post

@@ -58,6 +58,13 @@ const Home = () => {
                   </Card>
                 </Link>
               </S.ImageCol>
+              <S.ImageCol xl={6} lg={6} md={10} sm={20} xs={20}>
+                <Link to="/mails">
+                  <Card hoverable>
+                    <Meta title="MAILING LIST" />
+                  </Card>
+                </Link>
+              </S.ImageCol>
             </Row>
           </Col>
         </Row>

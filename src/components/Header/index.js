@@ -41,6 +41,12 @@ const menu = (
         contacts
       </S.Span>
     </Menu.Item>
+    <Menu.Item key="7">
+      <S.Span href="/mails">
+        {window.location.pathname === "/mails" && <CaretRightOutlined />}
+        mailing list
+      </S.Span>
+    </Menu.Item>
   </Menu>
 );
 

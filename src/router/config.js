@@ -54,6 +54,11 @@ const routes = [
     exact: true,
     component: "Contacts",
   },
+  {
+    path: ["/mails"],
+    exact: true,
+    component: "Mails",
+  },
 ];
 
 export default routes;

@@ -14,17 +14,18 @@ const Products = () => {
   const [file, setFile] = useState({});
   const [description, setDescription] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
-  const [discountedPrice, setDiscountedPrice] = useState("");
+  const [discountPercentage, setDiscountPercentage] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
-  const [colours, setColours] = useState("");
   const [category, setCategory] = useState("");
+
+  const [discountInput, toggleDiscountInput] = useState(false);
+  const [newDiscount, setNewDiscount] = useState("");
+  const [productsToDiscount, setProductsToDiscount] = useState([]);
 
   useEffect(() => {
     axios
       .get("https://myindianthings-backend.herokuapp.com/products")
       .then((response) => {
-        console.log("Products");
-        console.log(response.data);
         setProducts(response.data);
       })
       .catch((error) => console.log(error));
@@ -32,39 +33,33 @@ const Products = () => {
     axios
       .get("https://myindianthings-backend.herokuapp.com/categories")
       .then((response) => {
-        console.log("Categories");
-        console.log(response.data);
         setCategories(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
 
   const submitProduct = () => {
-    const colourArray = colours.split(",");
     const formData = new FormData();
 
     formData.append("image", file);
     formData.append("name", name);
     formData.append("description", description);
     formData.append("originalPrice", originalPrice);
-    formData.append("discountedPrice", discountedPrice);
+    formData.append("discountPercentage", discountPercentage);
     formData.append("isFeatured", isFeatured);
-    formData.append("colours", colourArray);
     formData.append("category", category);
 
     axios
       .post("https://myindianthings-backend.herokuapp.com/products", formData)
       .then((response) => {
-        console.log(response.data);
         setProducts([...products, response.data]);
         setName("");
         document.getElementById("image").value = null;
         setDescription("");
         setOriginalPrice("");
-        setDiscountedPrice("");
+        setDiscountPercentage("");
         setFile({});
         setCategory("");
-        setColours("");
         message.success("Successfully created the new product");
       })
       .catch((error) => {
@@ -74,12 +69,43 @@ const Products = () => {
       });
   };
 
+  const submitDiscount = () => {
+    if (newDiscount === "" || parseInt(newDiscount) === 0) {
+      message.error("Please enter some discount");
+    } else if (productsToDiscount.length === 0) {
+      message.error("Please select some products to discount");
+    } else {
+      const data = {
+        products: productsToDiscount,
+        discountPercentage: newDiscount,
+      };
+      axios
+        .post(
+          "https://myindianthings-backend.herokuapp.com/products/setDiscount",
+          data
+        )
+        .then((response) => {
+          setNewDiscount("");
+          setProductsToDiscount([]);
+          message.success(
+            "Successfully applied the discount on all selected products"
+          );
+        })
+        .catch((err) => {
+          message.error("Some error occured");
+        });
+    }
+  };
+
   return (
     <div
       style={{ textAlign: "center", marginTop: "50px", marginBottom: "30px" }}
     >
       <h1>Products</h1>
-      <Button onClick={() => toggleProductInput(!productInput)}>
+      <Button
+        style={{ marginRight: "20px" }}
+        onClick={() => toggleProductInput(!productInput)}
+      >
         Add New product
       </Button>
       {productInput && (
@@ -124,9 +150,9 @@ const Products = () => {
             required
             style={{ margin: "10px", width: "80%" }}
             type="number"
-            value={discountedPrice}
-            onChange={(e) => setDiscountedPrice(e.target.value)}
-            placeholder="Discounted Price"
+            value={discountPercentage}
+            onChange={(e) => setDiscountPercentage(e.target.value)}
+            placeholder="Discount Percentage"
           />
           <br />
           <Select
@@ -153,19 +179,61 @@ const Products = () => {
             <Radio value={false}>Not Featured</Radio>
           </Radio.Group>
           <br />
-          <Input
-            type="text"
-            placeholder="Enter comma separated color hex codes"
-            value={colours}
-            onChange={(e) => setColours(e.target.value)}
-            style={{ margin: "10px", width: "80%" }}
-          />
-          <br />
           <Button onClick={() => submitProduct()} style={{ margin: "10px" }}>
             Post
           </Button>
+          <hr />
+          <br />
+          <br />
         </div>
       )}
+
+      <Button
+        style={{ marginTop: "10px" }}
+        onClick={() => toggleDiscountInput(!discountInput)}
+      >
+        Add discount percentage to products
+      </Button>
+
+      {discountInput && (
+        <>
+          <div style={{ marginTop: "15px" }}>
+            <Input
+              required
+              style={{ margin: "10px", width: "50%" }}
+              type="Number"
+              placeholder="Discount Percentage"
+              value={newDiscount}
+              onChange={(e) => setNewDiscount(e.target.value)}
+            />
+            <br />
+            <Select
+              mode="multiple"
+              allowClear
+              required
+              placeholder="Select Products"
+              style={{ margin: "10px", width: "80%" }}
+              onChange={(val) => setProductsToDiscount(val)}
+            >
+              {products.map((val) => {
+                return (
+                  <Option key={val._id} value={val._id}>
+                    {val.name}
+                  </Option>
+                );
+              })}
+            </Select>
+            <br />
+            <Button onClick={() => submitDiscount()} style={{ margin: "10px" }}>
+              Post
+            </Button>
+            <hr />
+            <br />
+            <br />
+          </div>
+        </>
+      )}
+
       <Grid gridOf="product" data={products} />
     </div>
   );
