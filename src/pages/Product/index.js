@@ -248,7 +248,11 @@ const Product = (props) => {
         <br />
 
         <div style={{ display: showDetails ? "block" : "none" }}>
-          <p>Description : {product.description}</p>
+          <hr />
+          <p style={{ whiteSpace: "pre-wrap" }}>
+            Description : {product.description}
+          </p>
+          <hr />
           <br />
           <p>Original Price : {product.originalPrice}</p>
           <br />
