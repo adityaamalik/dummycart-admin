@@ -39,34 +39,45 @@ const Products = () => {
   }, []);
 
   const submitProduct = () => {
-    const formData = new FormData();
+    if (name === "") {
+      message.error("Please fill the name of product");
+    } else if (description === "") {
+      message.error("Please fill the description of the product");
+    } else if (originalPrice === "") {
+      message.error("Please fill the original price of the product");
+    } else if (document.getElementById("image").value === null) {
+      message.error("Please select an image for the product");
+    } else if (category === "") {
+      message.error("Please select a category");
+    } else {
+      const formData = new FormData();
 
-    formData.append("image", file);
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("originalPrice", originalPrice);
-    formData.append("discountPercentage", discountPercentage);
-    formData.append("isFeatured", isFeatured);
-    formData.append("category", category);
+      formData.append("image", file);
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("originalPrice", originalPrice);
+      formData.append("discountPercentage", discountPercentage);
+      formData.append("isFeatured", isFeatured);
+      formData.append("category", category);
 
-    axios
-      .post("https://myindianthings-backend.herokuapp.com/products", formData)
-      .then((response) => {
-        setProducts([...products, response.data]);
-        setName("");
-        document.getElementById("image").value = null;
-        setDescription("");
-        setOriginalPrice("");
-        setDiscountPercentage("");
-        setFile({});
-        setCategory("");
-        message.success("Successfully created the new product");
-      })
-      .catch((error) => {
-        console.log(error);
-        setName("");
-        message.error("Some error occured");
-      });
+      axios
+        .post("https://myindianthings-backend.herokuapp.com/products", formData)
+        .then((response) => {
+          setProducts([...products, response.data]);
+          setName("");
+          document.getElementById("image").value = null;
+          setDescription("");
+          setOriginalPrice("");
+          setDiscountPercentage("");
+          setFile({});
+          setCategory("");
+          message.success("Successfully created the new product");
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error("Some error occured");
+        });
+    }
   };
 
   const submitDiscount = () => {
