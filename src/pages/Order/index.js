@@ -112,6 +112,8 @@ const Order = (props) => {
         <br />
         <p>Zip : {order.zip}</p>
         <br />
+        <p>Payment Method : {order.paymentMethod}</p>
+        <br />
         <p>
           Payment Status : {order.paymentstatus}{" "}
           <EditOutlined
