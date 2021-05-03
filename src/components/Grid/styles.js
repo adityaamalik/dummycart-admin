@@ -5,7 +5,6 @@ export const MiddleBlock = styled.section`
   position: relative;
   text-align: center;
   display: flex;
-  justify-content: center;
 `;
 
 export const ImageCol = styled(Col)`

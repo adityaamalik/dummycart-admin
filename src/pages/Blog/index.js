@@ -5,7 +5,7 @@ import { Button, Image, Input, message } from "antd";
 const { TextArea } = Input;
 
 const Blog = (props) => {
-  const { id } = props.location.state;
+  const { d } = props.location.state;
 
   const [blog, setBlog] = useState({});
   const [title, setTitle] = useState("");
@@ -15,13 +15,8 @@ const Blog = (props) => {
   const [showEditBox, toggleEditBox] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`https://myindianthings-backend.herokuapp.com/blogs/${id}`)
-      .then((response) => {
-        setBlog(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, [id]);
+    setBlog(d);
+  }, [d]);
 
   const submitBlog = () => {
     const fmData = new FormData();
@@ -31,7 +26,7 @@ const Blog = (props) => {
     fmData.append("image", image);
 
     axios
-      .put(`https://myindianthings-backend.herokuapp.com/blogs/${id}`, fmData)
+      .put(`https://myindianthings-backend.herokuapp.com/blogs/${d.id}`, fmData)
       .then(
         (response) => {
           console.log(response.data);
@@ -50,7 +45,7 @@ const Blog = (props) => {
 
   const deleteBlog = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/blogs/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/blogs/${d.id}`)
       .then((response) => {
         message.success("Deleted the blog successfully !");
         window.location.pathname = "/blogs";

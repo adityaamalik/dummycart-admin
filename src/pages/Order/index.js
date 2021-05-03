@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { LinkOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 
 const Order = (props) => {
-  const { id } = props.location.state;
+  const { d } = props.location.state;
+  console.log(d);
 
   const [order, setOrder] = useState({});
   const [showPaymentEditBox, togglePaymentEditBox] = useState(false);
@@ -17,20 +18,13 @@ const Order = (props) => {
   const [shippingStatus, setShippingStatus] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`https://myindianthings-backend.herokuapp.com/orders/${id}`)
-      .then((response) => {
-        console.log(response.data);
-        setOrder(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, [id]);
+    setOrder(d);
+  }, [d]);
 
   const deleteOrder = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/orders/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/orders/${d.id}`)
       .then((response) => {
-        console.log(response.data);
         window.location.pathname = "/orders";
       })
       .catch((err) => {
@@ -47,7 +41,10 @@ const Order = (props) => {
         paymentstatus: paymentStatus,
       };
       axios
-        .put(`https://myindianthings-backend.herokuapp.com/orders/${id}`, data)
+        .put(
+          `https://myindianthings-backend.herokuapp.com/orders/${d.id}`,
+          data
+        )
         .then((response) => {
           console.log(response.data);
           message.success("Successfully updated the payment status");
@@ -70,7 +67,10 @@ const Order = (props) => {
         shippingstatus: shippingStatus,
       };
       axios
-        .put(`https://myindianthings-backend.herokuapp.com/orders/${id}`, data)
+        .put(
+          `https://myindianthings-backend.herokuapp.com/orders/${d.id}`,
+          data
+        )
         .then((response) => {
           console.log(response.data);
           message.success("Successfully updated the shipping status");
@@ -182,9 +182,9 @@ const Order = (props) => {
         <h2>Ordered Items are listed below</h2>
         {order !== undefined &&
           order.orderItems !== undefined &&
-          order.orderItems.map((item) => {
+          order.orderItems.map((item, index) => {
             return (
-              <>
+              <div key={index}>
                 <hr />
                 <p>
                   <Link
@@ -207,7 +207,7 @@ const Order = (props) => {
                 <br />
                 <p>Colour : {item.colour}</p>
                 <hr />
-              </>
+              </div>
             );
           })}
         <Button danger onClick={() => deleteOrder()}>

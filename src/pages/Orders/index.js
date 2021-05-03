@@ -58,7 +58,7 @@ const Orders = () => {
                   to={{
                     pathname: "/order",
                     state: {
-                      id: order._id,
+                      d: order,
                     },
                   }}
                 >

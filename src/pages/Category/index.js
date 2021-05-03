@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button, Image, Input, message } from "antd";
 
 const Category = (props) => {
-  const { id } = props.location.state;
+  const { d } = props.location.state;
 
   const [category, setCategory] = useState({});
   const [name, setName] = useState("");
@@ -13,14 +13,8 @@ const Category = (props) => {
   const [showImageEditBox, toggleImageEditBox] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`https://myindianthings-backend.herokuapp.com/categories/${id}`)
-      .then((response) => {
-        console.log(response.data);
-        setCategory(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, [id]);
+    setCategory(d);
+  }, [d]);
 
   const submitName = () => {
     if (name === "") {
@@ -31,7 +25,7 @@ const Category = (props) => {
 
       axios
         .put(
-          `https://myindianthings-backend.herokuapp.com/categories/${id}`,
+          `https://myindianthings-backend.herokuapp.com/categories/${d.id}`,
           formData
         )
         .then((response) => {
@@ -60,7 +54,7 @@ const Category = (props) => {
       formData.append("image", image);
       axios
         .put(
-          `https://myindianthings-backend.herokuapp.com/categories/${id}`,
+          `https://myindianthings-backend.herokuapp.com/categories/${d.id}`,
           formData
         )
         .then((response) => {
@@ -80,7 +74,7 @@ const Category = (props) => {
 
   const deleteCategory = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/categories/${id}`)
+      .delete(`https://myindianthings-backend.herokuapp.com/categories/${d.id}`)
       .then((response) => {
         message
           .success("Category deleted successfully !")

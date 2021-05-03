@@ -6,7 +6,7 @@ import { CheckOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 const { Option } = Select;
 const Product = (props) => {
-  const { id } = props.location.state;
+  const { d, id } = props.location.state;
 
   const [product, setProduct] = useState({});
   const [images, setImages] = useState([]);
@@ -24,13 +24,18 @@ const Product = (props) => {
   const [associatedColour, setAssociatedColour] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`https://myindianthings-backend.herokuapp.com/products/${id}`)
-      .then((response) => {
-        setGallery(response.data.images);
-        setProduct(response.data);
-      })
-      .catch((error) => console.log(error));
+    if (!!d) {
+      setGallery(d.images);
+      setProduct(d);
+    } else {
+      axios
+        .get(`https://myindianthings-backend.herokuapp.com/products/${id}`)
+        .then((response) => {
+          setGallery(response.data.images);
+          setProduct(response.data);
+        })
+        .catch((error) => console.log(error));
+    }
 
     axios
       .get("https://myindianthings-backend.herokuapp.com/categories")
@@ -38,7 +43,7 @@ const Product = (props) => {
         setCategories(response.data);
       })
       .catch((error) => console.log(error));
-  }, [id]);
+  }, [d, id]);
 
   const onUploadPhotos = () => {
     const formData = new FormData();
@@ -49,7 +54,9 @@ const Product = (props) => {
 
     axios
       .put(
-        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${id}`,
+        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${
+          d.id || id
+        }`,
         formData
       )
       .then((response) => {
@@ -72,7 +79,9 @@ const Product = (props) => {
 
     axios
       .put(
-        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${id}`,
+        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${
+          d.id || id
+        }`,
         formData
       )
       .then((response) => {
@@ -108,7 +117,7 @@ const Product = (props) => {
 
     axios
       .put(
-        `https://myindianthings-backend.herokuapp.com/products/${id}`,
+        `https://myindianthings-backend.herokuapp.com/products/${d.id || id}`,
         formData
       )
       .then((response) => {
@@ -131,7 +140,9 @@ const Product = (props) => {
 
   const deleteProduct = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/products/${id}`)
+      .delete(
+        `https://myindianthings-backend.herokuapp.com/products/${d.id || id}`
+      )
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/products";
@@ -146,7 +157,9 @@ const Product = (props) => {
   const submitColour = (imgid) => {
     axios
       .post(
-        `https://myindianthings-backend.herokuapp.com/products/colours/${id}`,
+        `https://myindianthings-backend.herokuapp.com/products/colours/${
+          d.id || id
+        }`,
         {
           imageId: imgid,
           colour: associatedColour,

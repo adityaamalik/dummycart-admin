@@ -7,6 +7,7 @@ const { Meta } = Card;
 
 const Grid = (props) => {
   const { gridOf, data } = props;
+  console.log(data);
 
   const deleteReview = (id) => {
     axios
@@ -31,7 +32,8 @@ const Grid = (props) => {
             if (!!val.image) {
               img = new Buffer.from(val.image.data).toString("base64");
               url = `data:image/${val.image.contentType};base64,${img}`;
-            } else {
+            }
+            if (!!val.commentimages) {
               img = new Buffer.from(val.commentimages.data).toString("base64");
               url = `data:image/${val.commentimages.contentType};base64,${img}`;
             }
@@ -42,20 +44,23 @@ const Grid = (props) => {
                   to={{
                     pathname: "/" + gridOf,
                     state: {
-                      id: val._id,
+                      d: val,
                     },
                   }}
                 >
                   <Card
                     hoverable={gridOf === "reviews" ? false : true}
                     bordered={gridOf === "reviews" ? true : false}
+                    style={{ minWidth: 300 }}
                     cover={
-                      <img
-                        height="100%"
-                        alt={val.name}
-                        // src={val.image || val.commentimages}
-                        src={url}
-                      />
+                      (!!val.commentimages || !!val.image) && (
+                        <img
+                          height="100%"
+                          alt={val.name}
+                          // src={val.image || val.commentimages}
+                          src={url}
+                        />
+                      )
                     }
                   >
                     <Meta
