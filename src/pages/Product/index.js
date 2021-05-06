@@ -17,7 +17,7 @@ const Product = (props) => {
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [isFeatured, setIsFeatured] = useState();
   const [category, setCategory] = useState("");
-  const [inStock, setInStock] = useState("yes");
+  const [inStock, setInStock] = useState();
 
   const [imageURI, setImageURI] = useState("");
   const [showGalleryInput, toggleGalleryInput] = useState(false);

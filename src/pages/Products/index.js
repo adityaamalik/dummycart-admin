@@ -29,7 +29,7 @@ const Products = () => {
   const [galleryImage7, setGalleryImage7] = useState("");
   const [color7, setColor7] = useState("");
 
-  const [inStock, setInStock] = useState("yes");
+  const [inStock, setInStock] = useState();
 
   const [description, setDescription] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
@@ -42,7 +42,7 @@ const Products = () => {
   const [productsToDiscount, setProductsToDiscount] = useState([]);
 
   const [inStockInput, toggleInStockInput] = useState(false);
-  const [newInStock, setNewInStock] = useState("yes");
+  const [newInStock, setNewInStock] = useState();
   const [productsToInStock, setProductsToInStock] = useState([]);
 
   const [showGalleryInput, toggleGalleryInput] = useState(false);
