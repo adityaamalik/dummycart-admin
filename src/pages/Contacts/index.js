@@ -7,7 +7,7 @@ const Contacts = () => {
 
   useEffect(() => {
     axios
-      .get("https://myindianthings-backend.herokuapp.com/contacts")
+      .get("/contacts")
       .then((response) => {
         console.log(response.data);
         setContacts(response.data);
@@ -17,7 +17,7 @@ const Contacts = () => {
 
   const deleteContact = (id) => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/contacts/${id}`)
+      .delete(`/contacts/${id}`)
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/contacts";

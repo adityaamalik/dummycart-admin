@@ -7,11 +7,11 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [categoryInput, toggleCategoryInput] = useState(false);
   const [name, setName] = useState("");
-  const [file, setFile] = useState({});
+  const [imageURI, setImageURI] = useState("");
 
   useEffect(() => {
     axios
-      .get("https://myindianthings-backend.herokuapp.com/categories")
+      .get("/categories")
       .then((response) => {
         setCategories(response.data);
       })
@@ -19,18 +19,17 @@ const Categories = () => {
   }, []);
 
   const submitCategory = () => {
-    const formData = new FormData();
-
-    formData.append("image", file);
-    formData.append("name", name);
+    const data = {
+      name: name,
+      image: imageURI,
+    };
 
     axios
-      .post("https://myindianthings-backend.herokuapp.com/categories", formData)
+      .post("/categories", data)
       .then((response) => {
         console.log(response.data);
         setCategories([...categories, response.data]);
         setName("");
-        document.getElementById("image").value = null;
         message.success("Successfully created the new category");
       })
       .catch((error) => {
@@ -60,10 +59,13 @@ const Categories = () => {
               onChange={(val) => setName(val.target.value)}
             />
             <br />
-            <input
-              id="image"
-              type="file"
-              onChange={(e) => setFile(e.target.files[0])}
+            <Input
+              required
+              style={{ margin: "10px", width: "80%" }}
+              type="text"
+              value={imageURI}
+              placeholder="Image URL"
+              onChange={(val) => setImageURI(val.target.value)}
             />
             <br />
             <Button onClick={() => submitCategory()} style={{ margin: "10px" }}>

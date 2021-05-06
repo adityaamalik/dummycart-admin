@@ -23,7 +23,7 @@ const Order = (props) => {
 
   const deleteOrder = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/orders/${d.id}`)
+      .delete(`/orders/${d.id}`)
       .then((response) => {
         window.location.pathname = "/orders";
       })
@@ -41,10 +41,7 @@ const Order = (props) => {
         paymentstatus: paymentStatus,
       };
       axios
-        .put(
-          `https://myindianthings-backend.herokuapp.com/orders/${d.id}`,
-          data
-        )
+        .put(`/orders/${d.id}`, data)
         .then((response) => {
           console.log(response.data);
           message.success("Successfully updated the payment status");
@@ -67,10 +64,7 @@ const Order = (props) => {
         shippingstatus: shippingStatus,
       };
       axios
-        .put(
-          `https://myindianthings-backend.herokuapp.com/orders/${d.id}`,
-          data
-        )
+        .put(`/orders/${d.id}`, data)
         .then((response) => {
           console.log(response.data);
           message.success("Successfully updated the shipping status");

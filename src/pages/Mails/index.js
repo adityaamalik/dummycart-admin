@@ -6,7 +6,7 @@ const Mails = () => {
 
   useEffect(() => {
     axios
-      .get(`https://myindianthings-backend.herokuapp.com/mail`)
+      .get(`/mail`)
       .then((response) => {
         console.log(response.data);
         setMails(response.data);

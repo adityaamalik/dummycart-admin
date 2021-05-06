@@ -8,7 +8,7 @@ const Orders = () => {
 
   useEffect(() => {
     axios
-      .get("https://myindianthings-backend.herokuapp.com/orders")
+      .get("/orders")
       .then((response) => {
         console.log(response.data);
         setOrders(response.data);

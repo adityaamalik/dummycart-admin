@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Col, Image, Input, message, Radio, Row, Select } from "antd";
-import { CheckOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -9,8 +8,6 @@ const Product = (props) => {
   const { d, id } = props.location.state;
 
   const [product, setProduct] = useState({});
-  const [images, setImages] = useState([]);
-  const [gallery, setGallery] = useState([]);
   const [showDetails, toggleDetails] = useState(true);
 
   const [categories, setCategories] = useState([]);
@@ -20,115 +17,94 @@ const Product = (props) => {
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [isFeatured, setIsFeatured] = useState();
   const [category, setCategory] = useState("");
+  const [inStock, setInStock] = useState("yes");
 
-  const [associatedColour, setAssociatedColour] = useState("");
+  const [imageURI, setImageURI] = useState("");
+  const [showGalleryInput, toggleGalleryInput] = useState(false);
+
+  const [galleryImage1, setGalleryImage1] = useState("");
+  const [color1, setColor1] = useState("");
+  const [galleryImage2, setGalleryImage2] = useState("");
+  const [color2, setColor2] = useState("");
+  const [galleryImage3, setGalleryImage3] = useState("");
+  const [color3, setColor3] = useState("");
+  const [galleryImage4, setGalleryImage4] = useState("");
+  const [color4, setColor4] = useState("");
+  const [galleryImage5, setGalleryImage5] = useState("");
+  const [color5, setColor5] = useState("");
+  const [galleryImage6, setGalleryImage6] = useState("");
+  const [color6, setColor6] = useState("");
+  const [galleryImage7, setGalleryImage7] = useState("");
+  const [color7, setColor7] = useState("");
 
   useEffect(() => {
-    if (!!d) {
-      setGallery(d.images);
-      setProduct(d);
-    } else {
-      axios
-        .get(`https://myindianthings-backend.herokuapp.com/products/${id}`)
-        .then((response) => {
-          setGallery(response.data.images);
-          setProduct(response.data);
-        })
-        .catch((error) => console.log(error));
-    }
+    axios
+      .get(`/products/${id || d.id}`)
+      .then((response) => {
+        console.log(response.data);
+        setProduct(response.data);
+      })
+      .catch((error) => console.log(error));
 
     axios
-      .get("https://myindianthings-backend.herokuapp.com/categories")
+      .get("/categories")
       .then((response) => {
         setCategories(response.data);
       })
       .catch((error) => console.log(error));
   }, [d, id]);
 
-  const onUploadPhotos = () => {
-    const formData = new FormData();
-
-    for (let image of images) {
-      formData.append("images", image);
-    }
-
-    axios
-      .put(
-        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${
-          d.id || id
-        }`,
-        formData
-      )
-      .then((response) => {
-        setGallery(response.data.images);
-        document.getElementById("images").value = null;
-        setGallery([]);
-        message.success("Successfully uploaded the photos");
-      })
-      .catch((err) => {
-        message.error("Some error occured");
-      });
-  };
-
-  const removeImages = () => {
-    const formData = new FormData();
-
-    const emptyImgs = [];
-
-    formData.append("images", emptyImgs);
-
-    axios
-      .put(
-        `https://myindianthings-backend.herokuapp.com/products/gallery-images/${
-          d.id || id
-        }`,
-        formData
-      )
-      .then((response) => {
-        setGallery(response.data.images);
-        message.success("Successfully removed all the phots");
-      })
-      .catch((err) => {
-        message.error("Some error occured");
-      });
-  };
-
   const submitProduct = () => {
-    const formData = new FormData();
-
-    if (name !== "") {
-      formData.append("name", name);
-    }
-    if (description !== "") {
-      formData.append("description", description);
-    }
-    if (originalPrice !== "") {
-      formData.append("originalPrice", originalPrice);
-    }
-    if (discountPercentage !== "") {
-      formData.append("discountPercentage", discountPercentage);
-    }
-    if (isFeatured !== undefined) {
-      formData.append("isFeatured", isFeatured);
-    }
-    if (category !== "") {
-      formData.append("category", category);
-    }
+    const data = {
+      image: imageURI,
+      name: name,
+      description: description,
+      originalPrice: originalPrice,
+      discountPercentage: discountPercentage,
+      isFeatured: isFeatured,
+      inStock: inStock,
+      category: category,
+      galleryImage1: galleryImage1,
+      color1: color1,
+      galleryImage2: galleryImage2,
+      color2: color2,
+      galleryImage3: galleryImage3,
+      color3: color3,
+      galleryImage4: galleryImage4,
+      color4: color4,
+      galleryImage5: galleryImage5,
+      color5: color5,
+      galleryImage6: galleryImage6,
+      color6: color6,
+      galleryImage7: galleryImage7,
+      color7: color7,
+    };
 
     axios
-      .put(
-        `https://myindianthings-backend.herokuapp.com/products/${d.id || id}`,
-        formData
-      )
+      .put(`/products/${d.id || id}`, data)
       .then((response) => {
         console.log(response.data);
         setProduct(response.data);
         setName("");
+        setImageURI("");
         setDescription("");
         setOriginalPrice("");
         setDiscountPercentage("");
-        setIsFeatured();
         setCategory("");
+        setGalleryImage1("");
+        setColor1("");
+        setGalleryImage2("");
+        setColor2("");
+        setGalleryImage3("");
+        setColor3("");
+        setGalleryImage4("");
+        setColor4("");
+        setGalleryImage5("");
+        setColor5("");
+        setGalleryImage6("");
+        setColor6("");
+        setGalleryImage7("");
+        setColor7("");
         message.success("Successfully updated the product");
       })
       .catch((error) => {
@@ -140,9 +116,7 @@ const Product = (props) => {
 
   const deleteProduct = () => {
     axios
-      .delete(
-        `https://myindianthings-backend.herokuapp.com/products/${d.id || id}`
-      )
+      .delete(`/products/${d.id || id}`)
       .then((response) => {
         console.log(response.data);
         window.location.pathname = "/products";
@@ -151,27 +125,6 @@ const Product = (props) => {
       .catch((err) => {
         console.log(err);
         message.error("Cannot delete the product");
-      });
-  };
-
-  const submitColour = (imgid) => {
-    axios
-      .post(
-        `https://myindianthings-backend.herokuapp.com/products/colours/${
-          d.id || id
-        }`,
-        {
-          imageId: imgid,
-          colour: associatedColour,
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        message.success("Successfully updated the associated colour");
-      })
-      .catch((err) => {
-        console.log(err);
-        message.error("Cannot update the associated colour");
       });
   };
 
@@ -185,77 +138,115 @@ const Product = (props) => {
         }}
       >
         <h1>Name : {product.name}</h1>
-        {!!product.image && (
-          <Image
-            width="300px"
-            height="auto"
-            src={`data:image/${
-              product.image.contentType
-            };base64,${new Buffer.from(product.image.data).toString("base64")}`}
-          />
-        )}
+        <Image width="300px" height="auto" src={product.image} />
         <br />
 
+        <hr />
         <Row>
-          {gallery.map((img, index) => {
-            return (
-              <Col lg={6} md={12} sm={24} xs={24} key={index}>
-                {!!img && (
-                  <>
-                    <Image
-                      src={`data:image/${
-                        img.contentType
-                      };base64,${img.data.toString("base64")}`}
-                      alt="gallery image"
-                      width="200px"
-                      style={{ margin: "10px" }}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Enter colour"
-                      defaultValue={img.colour}
-                      onChange={(e) => setAssociatedColour(e.target.value)}
-                    />
-                    <CheckOutlined
-                      onClick={() => submitColour(img.customId)}
-                      style={{
-                        marginLeft: "5px",
-                        padding: "5px",
-                        border: "1px solid black",
-                      }}
-                    />
-                  </>
-                )}
-              </Col>
-            );
-          })}
+          {!!product.galleryImage1 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage1}
+                alt="gallery image 1"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 1</h3>
+              <h4>Color : {product.color1}</h4>
+            </Col>
+          )}
+
+          {!!product.galleryImage2 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage2}
+                alt="gallery image 2"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 2</h3>
+              <h4>Color : {product.color2}</h4>
+            </Col>
+          )}
         </Row>
 
-        <div>
-          <Button onClick={() => removeImages()}>Delete All Images</Button>
-        </div>
-        <div style={{ marginTop: "10px" }}>
-          <label htmlFor="images">Select Image Gallery : </label>
-          <input
-            required
-            id="images"
-            type="file"
-            multiple
-            onChange={(e) => {
-              let arr = [];
-              for (let file of e.target.files) {
-                arr.push(file);
-              }
-              setImages([...arr]);
-            }}
-          />
-        </div>
-        {images.length !== 0 && (
-          <>
-            <br />
-            <Button onClick={() => onUploadPhotos()}>Upload Images</Button>
-          </>
-        )}
+        <Row>
+          {!!product.galleryImage3 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage3}
+                alt="gallery image 3"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 3</h3>
+              <h4>Color : {product.color3}</h4>
+            </Col>
+          )}
+
+          {!!product.galleryImage4 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage4}
+                alt="gallery image 4"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 4</h3>
+              <h4>Color : {product.color4}</h4>
+            </Col>
+          )}
+        </Row>
+
+        <Row>
+          {!!product.galleryImage5 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage5}
+                alt="gallery image 5"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 5</h3>
+              <h4>Color : {product.color5}</h4>
+            </Col>
+          )}
+
+          {!!product.galleryImage6 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage6}
+                alt="gallery image 6"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 6</h3>
+              <h4>Color : {product.color6}</h4>
+            </Col>
+          )}
+        </Row>
+
+        <Row>
+          {!!product.galleryImage7 && (
+            <Col lg={12} md={12} sm={24} xs={24}>
+              <Image
+                src={product.galleryImage7}
+                alt="gallery image 7"
+                width="200px"
+                style={{ margin: "10px" }}
+              />
+              <br />
+              <h3>Gallery Image 7</h3>
+              <h4>Color : {product.color7}</h4>
+            </Col>
+          )}
+        </Row>
 
         <br />
         <br />
@@ -272,6 +263,8 @@ const Product = (props) => {
           <p>Discount Percentage : {product.discountPercentage}</p>
           <br />
           <p>Featured Item : {product.isFeatured ? "Yes" : "No"}</p>
+          <br />
+          <p>In Stock : {product.inStock}</p>
         </div>
 
         <br />
@@ -291,9 +284,18 @@ const Product = (props) => {
             required
             style={{ margin: "10px", width: "300px" }}
             type="text"
-            value={name}
+            defaultValue={name}
             placeholder="Name"
             onChange={(val) => setName(val.target.value)}
+          />
+          <br />
+          <Input
+            required
+            style={{ margin: "10px", width: "300px" }}
+            type="text"
+            value={imageURI}
+            placeholder="Image URL"
+            onChange={(val) => setImageURI(val.target.value)}
           />
           <br />
           <TextArea
@@ -345,6 +347,170 @@ const Product = (props) => {
             <Radio value={true}>Featured Item</Radio>
             <Radio value={false}>Not Featured</Radio>
           </Radio.Group>
+          <br />
+          <Radio.Group
+            style={{ margin: "10px", width: "300px" }}
+            onChange={(e) => setInStock(e.target.value)}
+            value={inStock}
+          >
+            <Radio value="yes">In Stock</Radio>
+            <Radio value="no">Not In Stock</Radio>
+          </Radio.Group>
+          <br />
+          <Button
+            onClick={() => toggleGalleryInput(!showGalleryInput)}
+            style={{ margin: "10px" }}
+          >
+            Fill Gallery Images
+          </Button>
+          {showGalleryInput && (
+            <div style={{ marginTop: "15px" }}>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage1}
+                    placeholder="Gallery Image 1"
+                    onChange={(val) => setGalleryImage1(val.target.value)}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={color1}
+                    placeholder="Colour for Gallery Image 1"
+                    onChange={(val) => setColor1(val.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage2}
+                    placeholder="Gallery Image 2"
+                    onChange={(val) => setGalleryImage2(val.target.value)}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={color2}
+                    placeholder="Colour for Gallery Image 2"
+                    onChange={(val) => setColor2(val.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage3}
+                    placeholder="Gallery Image 3"
+                    onChange={(val) => setGalleryImage3(val.target.value)}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={color3}
+                    placeholder="Colour for Gallery Image 3"
+                    onChange={(val) => setColor3(val.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage4}
+                    placeholder="Gallery Image 4"
+                    onChange={(val) => setGalleryImage4(val.target.value)}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={color4}
+                    placeholder="Colour for Gallery Image 4"
+                    onChange={(val) => setColor4(val.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage5}
+                    placeholder="Gallery Image 5"
+                    onChange={(val) => setGalleryImage5(val.target.value)}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={color5}
+                    placeholder="Colour for Gallery Image 5"
+                    onChange={(val) => setColor5(val.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage6}
+                    placeholder="Gallery Image 6"
+                    onChange={(val) => setGalleryImage6(val.target.value)}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={color6}
+                    placeholder="Colour for Gallery Image 6"
+                    onChange={(val) => setColor6(val.target.value)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Input
+                    required
+                    style={{ margin: "10px", width: "80%" }}
+                    type="text"
+                    value={galleryImage7}
+                    placeholder="Gallery Image 7"
+                    onChange={(val) => setGalleryImage7(val.target.value)}
+                  />
+                </Col>
+              </Row>
+            </div>
+          )}
           <br />
           <Button onClick={() => submitProduct()} style={{ margin: "10px" }}>
             Post

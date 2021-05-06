@@ -15,37 +15,38 @@ const Blog = (props) => {
   const [showEditBox, toggleEditBox] = useState(false);
 
   useEffect(() => {
-    setBlog(d);
-  }, [d]);
+    axios
+      .get(`/blogs/${d.id}`)
+      .then((response) => setBlog(response.data))
+      .catch((err) => console.log(err));
+  }, [d.id]);
 
   const submitBlog = () => {
-    const fmData = new FormData();
+    const data = {
+      title: title,
+      content: content,
+      image: image,
+    };
 
-    fmData.append("title", title);
-    fmData.append("content", content);
-    fmData.append("image", image);
-
-    axios
-      .put(`https://myindianthings-backend.herokuapp.com/blogs/${d.id}`, fmData)
-      .then(
-        (response) => {
-          console.log(response.data);
-          setBlog(response.data);
-          document.getElementById("image").value = null;
-          setTitle("");
-          setContent("");
-          message.success("Blog updated !");
-        },
-        (error) => {
-          console.log(error);
-          message.error("Some error occured");
-        }
-      );
+    axios.put(`/blogs/${d.id}`, data).then(
+      (response) => {
+        console.log(response.data);
+        setBlog(response.data);
+        setTitle("");
+        setContent("");
+        setImage("");
+        message.success("Blog updated !");
+      },
+      (error) => {
+        console.log(error);
+        message.error("Some error occured");
+      }
+    );
   };
 
   const deleteBlog = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/blogs/${d.id}`)
+      .delete(`/blogs/${d.id}`)
       .then((response) => {
         message.success("Deleted the blog successfully !");
         window.location.pathname = "/blogs";
@@ -63,15 +64,7 @@ const Blog = (props) => {
     >
       <h1>Title : {blog.title}</h1>
       <h2>Content : {blog.content}</h2>
-      {!!blog.image && (
-        <Image
-          width="300px"
-          height="auto"
-          src={`data:image/${blog.image.contentType};base64,${new Buffer.from(
-            blog.image.data
-          ).toString("base64")}`}
-        />
-      )}
+      {!!blog.image && <Image width="300px" height="auto" src={blog.image} />}
 
       <br />
       <br />
@@ -96,14 +89,12 @@ const Blog = (props) => {
           placeholder="Content"
         />
         <br />
-        <label htmlFor="image">Select Single Image : </label>
-        <input
-          required
-          id="image"
-          type="file"
-          onChange={(e) => {
-            setImage(e.target.files[0]);
-          }}
+        <Input
+          style={{ margin: "10px", width: "300px" }}
+          type="text"
+          value={image}
+          placeholder="Image URL"
+          onChange={(val) => setImage(val.target.value)}
         />
         <br />
         <br />

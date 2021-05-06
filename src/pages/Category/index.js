@@ -7,74 +7,41 @@ const Category = (props) => {
 
   const [category, setCategory] = useState({});
   const [name, setName] = useState("");
-  const [image, setImage] = useState({});
+  const [imageURI, setImageURI] = useState("");
 
-  const [showNameEditBox, toggleNameEditBox] = useState(false);
-  const [showImageEditBox, toggleImageEditBox] = useState(false);
+  const [showEditBox, toggleEditBox] = useState(false);
 
   useEffect(() => {
-    setCategory(d);
+    axios
+      .get(`/categories/${d.id}`)
+      .then((response) => setCategory(response.data))
+      .catch((err) => console.log(err));
   }, [d]);
 
-  const submitName = () => {
-    if (name === "") {
-      message.error("Please enter name to update !");
-    } else {
-      const formData = new FormData();
-      formData.append("name", name);
+  const submitCategory = () => {
+    const data = {
+      name: name,
+      image: imageURI,
+    };
 
-      axios
-        .put(
-          `https://myindianthings-backend.herokuapp.com/categories/${d.id}`,
-          formData
-        )
-        .then((response) => {
-          console.log(response.data);
-          setCategory(response.data);
-          setName("");
-          message.success("Successfully updated the category name");
-        })
-        .catch((error) => {
-          console.log(error);
+    axios
+      .put(`/categories/${d.id}`, data)
+      .then((response) => {
+        setCategory(response.data);
+        setName("");
+        setImageURI("");
+        message.success("Successfully updated the category name");
+      })
+      .catch((error) => {
+        console.log(error);
 
-          message.error("Some error occured");
-        });
-    }
-  };
-
-  const submitImage = () => {
-    if (
-      image &&
-      Object.keys(image).length === 0 &&
-      image.constructor === Object
-    ) {
-      message.error("Please select an image first");
-    } else {
-      const formData = new FormData();
-      formData.append("image", image);
-      axios
-        .put(
-          `https://myindianthings-backend.herokuapp.com/categories/${d.id}`,
-          formData
-        )
-        .then((response) => {
-          console.log(response.data);
-          setCategory(response.data);
-          document.getElementById("img").value = null;
-          setImage({});
-          message.success("Successfully updated the category image");
-        })
-        .catch((error) => {
-          console.log(error);
-
-          message.error("Some error occured");
-        });
-    }
+        message.error("Some error occured");
+      });
   };
 
   const deleteCategory = () => {
     axios
-      .delete(`https://myindianthings-backend.herokuapp.com/categories/${d.id}`)
+      .delete(`/categories/${d.id}`)
       .then((response) => {
         message
           .success("Category deleted successfully !")
@@ -94,29 +61,22 @@ const Category = (props) => {
           marginBottom: "30px",
         }}
       >
+        {console.log(category)}
         <h1>Name : {category.name}</h1>
         {!!category.image && (
-          <Image
-            width="300px"
-            height="auto"
-            src={`data:image/${
-              category.image.contentType
-            };base64,${new Buffer.from(category.image.data).toString(
-              "base64"
-            )}`}
-          />
+          <Image width="300px" height="auto" src={category.image} />
         )}
 
         <br />
-        <Button onClick={() => toggleNameEditBox(!showNameEditBox)}>
-          Edit category Name
+        <Button onClick={() => toggleEditBox(!showEditBox)}>
+          Edit category
         </Button>
 
         <br />
 
         <div
           style={{
-            display: showNameEditBox ? "block" : "none",
+            display: showEditBox ? "block" : "none",
             marginTop: "15px",
           }}
         >
@@ -129,37 +89,20 @@ const Category = (props) => {
             onChange={(e) => setName(e.target.value)}
           />
           <br />
-          <Button onClick={() => submitName()}>Update Name</Button>
+          <Input
+            required
+            style={{ margin: "10px", width: "300px" }}
+            type="text"
+            placeholder="Image URL"
+            value={imageURI}
+            onChange={(e) => setImageURI(e.target.value)}
+          />
+          <br />
+          <Button onClick={() => submitCategory()}>Submit</Button>
         </div>
         <br />
 
         <hr />
-
-        <br />
-        <Button onClick={() => toggleImageEditBox(!showImageEditBox)}>
-          Edit category Image
-        </Button>
-
-        <br />
-
-        <div
-          style={{
-            display: showImageEditBox ? "block" : "none",
-            marginTop: "15px",
-          }}
-        >
-          <br />
-          <label htmlFor="img">Select single image :</label>
-          <input
-            required
-            style={{ margin: "10px", width: "300px" }}
-            id="img"
-            type="file"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-          <br />
-          <Button onClick={() => submitImage()}>Update Image</Button>
-        </div>
 
         <div
           style={{

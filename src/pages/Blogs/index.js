@@ -13,7 +13,7 @@ const Blogs = () => {
 
   useEffect(() => {
     axios
-      .get("https://myindianthings-backend.herokuapp.com/blogs")
+      .get("/blogs")
       .then((response) => {
         console.log(response.data);
         setBlogs(response.data);
@@ -22,28 +22,26 @@ const Blogs = () => {
   }, []);
 
   const submitBlog = () => {
-    const fmData = new FormData();
+    const data = {
+      title: title,
+      content: content,
+      image: image,
+    };
 
-    fmData.append("title", title);
-    fmData.append("content", content);
-    fmData.append("image", image);
-
-    axios
-      .post("https://myindianthings-backend.herokuapp.com/blogs", fmData)
-      .then(
-        (response) => {
-          console.log(response.data);
-          setBlogs([...blogs, response.data]);
-          document.getElementById("image").value = null;
-          setBlogTitle("");
-          setBlogContent("");
-          message.success("New blog posted");
-        },
-        (error) => {
-          console.log(error);
-          message.error("Some error occured");
-        }
-      );
+    axios.post("/blogs", data).then(
+      (response) => {
+        console.log(response.data);
+        setBlogs([...blogs, response.data]);
+        setBlogTitle("");
+        setBlogContent("");
+        setImage("");
+        message.success("New blog posted");
+      },
+      (error) => {
+        console.log(error);
+        message.error("Some error occured");
+      }
+    );
   };
 
   return (
@@ -68,14 +66,12 @@ const Blogs = () => {
             onChange={(val) => setBlogContent(val.target.value)}
           />
           <br />
-          <label htmlFor="image">Select Single Image : </label>
-          <input
-            required
-            id="image"
-            type="file"
-            onChange={(e) => {
-              setImage(e.target.files[0]);
-            }}
+          <Input
+            style={{ margin: "10px", width: "80%" }}
+            type="text"
+            value={image}
+            placeholder="Image URL"
+            onChange={(val) => setImage(val.target.value)}
           />
           <br />
           <Button onClick={() => submitBlog()} style={{ margin: "10px" }}>

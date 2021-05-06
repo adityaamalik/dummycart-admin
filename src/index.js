@@ -6,6 +6,14 @@ import "antd/dist/antd.css";
 import Router from "./router";
 import reportWebVitals from "./reportWebVitals";
 
+import axios from "axios";
+
+//production
+axios.defaults.baseURL = "https://myindianthings-backend.herokuapp.com";
+
+//development
+// axios.defaults.baseURL = "http://localhost:3000";
+
 const App = () => (
   <BrowserRouter>
     <Router />
