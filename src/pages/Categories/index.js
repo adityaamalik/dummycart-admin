@@ -30,6 +30,7 @@ const Categories = () => {
         console.log(response.data);
         setCategories([...categories, response.data]);
         setName("");
+        setImageURI("");
         message.success("Successfully created the new category");
       })
       .catch((error) => {
